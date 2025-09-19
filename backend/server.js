@@ -69,7 +69,7 @@ app.get("/api/dashboard/:mentorId", async (req, res) => {
   try {
     const [rows] = await db.query(
       `SELECT st.student_reg_num, st.name, st.dept, st.semester, st.year,
-              COALESCE(AVG((sp.CIA1 + sp.CIA2 + sp.CIA3 + sp.ESE) / 4), 0) AS avg_progress,
+              COALESCE(AVG(((sp.CIA1 + sp.CIA2 + sp.CIA3 + sp.ESE) / 160) * 100), 0) AS avg_progress,
               COALESCE(AVG(sp.attendance), 0) AS avg_attendance
        FROM mentor_mentee mm
        JOIN students st ON mm.student_reg_num = st.student_reg_num
@@ -110,7 +110,7 @@ app.get("/api/mentees", async (req, res) => {
   try {
     const sql = `
       SELECT st.student_reg_num, st.name, st.dept, st.semester,
-             COALESCE(AVG((sp.CIA1 + sp.CIA2 + sp.CIA3 + sp.ESE) / 4), 0) AS avg_progress
+             COALESCE(AVG(((sp.CIA1 + sp.CIA2 + sp.CIA3 + sp.ESE) / 160) * 100), 0) AS avg_progress
       FROM students st
       LEFT JOIN student_performance sp
         ON st.student_reg_num = sp.student_reg_num
